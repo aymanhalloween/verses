@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+env/
+*.egg-info/
+dist/
+build/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+.next/
+out/
+
+# Audio test files
+*.mp3
+*.wav
+*.m4a
+*.flac
+*.webm
+*.ogg
+!backend/data/*.mp3
+
+# ML Models (cached)
+models_cache/
+.cache/
+
+# Logs
+*.log
+celery*.pid
