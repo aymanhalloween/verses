@@ -15,12 +15,12 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
-# Install Python dependencies
+# Install Python dependencies (use CPU-only torch to save ~1.5GB)
 COPY backend/requirements.txt ./backend/
-RUN pip install --no-cache-dir -r backend/requirements.txt
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu && \
+    pip install --no-cache-dir -r backend/requirements.txt
 
 # Pre-download the Whisper model so it's baked into the image
-# (avoids slow first-request download at runtime)
 RUN python -c "\
 from transformers import WhisperProcessor, WhisperForConditionalGeneration; \
 WhisperProcessor.from_pretrained('tarteel-ai/whisper-base-ar-quran'); \
