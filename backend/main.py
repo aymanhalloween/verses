@@ -161,6 +161,12 @@ async def upload_chunk(
     return {"uploadId": upload_id}
 
 
+@app.get("/api/status/healthcheck")
+async def healthcheck():
+    """Railway healthcheck endpoint."""
+    return {"status": "ok"}
+
+
 @app.get("/api/status/{job_id}")
 async def status(job_id: str):
     if job_id not in jobs:

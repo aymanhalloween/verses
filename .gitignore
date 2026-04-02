@@ -7,8 +7,10 @@ __pycache__/
 venv/
 env/
 *.egg-info/
-dist/
 build/
+
+# Frontend build output (built inside Docker, not committed)
+frontend/dist/
 
 # Environment
 .env
