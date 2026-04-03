@@ -3,7 +3,5 @@ builder = "DOCKERFILE"
 dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "python -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000} --app-dir backend"
-healthcheckPath = "/api/status/healthcheck"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3

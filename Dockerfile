@@ -33,8 +33,9 @@ COPY backend/ ./backend/
 # Copy built frontend from stage 1
 COPY --from=frontend-build /app/frontend/dist ./frontend/dist
 
-# Expose port (Railway sets PORT env var)
-EXPOSE 8000
+# Railway sets PORT env var — default to 8000 for local dev
+ENV PORT=8000
+EXPOSE ${PORT}
 
-# Start server
-CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--app-dir", "backend"]
+# Start server (must use shell form so $PORT expands)
+CMD python -m uvicorn main:app --host 0.0.0.0 --port $PORT --app-dir backend
