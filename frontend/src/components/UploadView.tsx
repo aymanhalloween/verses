@@ -2,6 +2,7 @@ import { useState, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { motion, AnimatePresence } from "framer-motion";
 import { FileAudio, X, ArrowRight, Loader2 } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface UploadViewProps {
   onStart: (data: { audio?: File; youtube_url?: string; remove_fatiha: string }) => void;
@@ -14,6 +15,7 @@ export function UploadView({ onStart, isPending, uploadProgress = 0 }: UploadVie
   const [youtubeUrl, setYoutubeUrl] = useState("");
   const [removeFatiha, setRemoveFatiha] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const isMobile = useIsMobile();
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     if (acceptedFiles.length > 0) {
@@ -23,13 +25,12 @@ export function UploadView({ onStart, isPending, uploadProgress = 0 }: UploadVie
     }
   }, []);
 
+  // Broad audio accept — iOS reports voice memos as audio/x-m4a, audio/mp4,
+  // or sometimes blank. Listing common types + extensions catches them all.
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      "audio/mpeg": [".mp3"],
-      "audio/wav": [".wav"],
-      "audio/mp4": [".m4a"],
-      "audio/ogg": [".ogg"],
+      "audio/*": [".mp3", ".wav", ".m4a", ".aac", ".ogg", ".opus", ".flac", ".mp4"],
     },
     maxFiles: 1,
   });
@@ -118,9 +119,15 @@ export function UploadView({ onStart, isPending, uploadProgress = 0 }: UploadVie
                 >
                   <input {...getInputProps()} disabled={!!youtubeUrl} />
                   <p className="text-sm text-zinc-300 font-light">
-                    {isDragActive ? "Release to upload" : "Drag & drop MP3, WAV, or M4A"}
+                    {isDragActive
+                      ? "Release to upload"
+                      : isMobile
+                        ? "Tap to choose a recording"
+                        : "Drag & drop MP3, WAV, or M4A"}
                   </p>
-                  <p className="text-[11px] text-zinc-600 uppercase tracking-wider">or click to browse</p>
+                  <p className="text-[11px] text-zinc-600 uppercase tracking-wider">
+                    {isMobile ? "Voice Memos · Files · WhatsApp" : "or click to browse"}
+                  </p>
                 </div>
               </motion.div>
             )}
